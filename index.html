@@ -376,6 +376,34 @@
     if (e.key === "ArrowRight") showRelative(1);
   });
 
+  // Swipe gesture support (mobile)
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchDeltaX = 0;
+  const SWIPE_THRESHOLD = 40;
+
+  lightbox.addEventListener("touchstart", (e) => {
+    if (e.touches.length !== 1) return;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    touchDeltaX = 0;
+  }, { passive: true });
+
+  lightbox.addEventListener("touchmove", (e) => {
+    if (e.touches.length !== 1) return;
+    touchDeltaX = e.touches[0].clientX - touchStartX;
+  }, { passive: true });
+
+  lightbox.addEventListener("touchend", (e) => {
+    const touchDeltaY = (e.changedTouches[0].clientY - touchStartY);
+    // Ignore mostly-vertical drags so they don't get mistaken for swipes
+    if (Math.abs(touchDeltaX) > Math.abs(touchDeltaY) && Math.abs(touchDeltaX) > SWIPE_THRESHOLD) {
+      if (touchDeltaX < 0) showRelative(1);
+      else showRelative(-1);
+    }
+    touchDeltaX = 0;
+  });
+
   function formatDownloads(n) {
     if (n >= 1000000) return (n / 1000000).toFixed(n % 1000000 === 0 ? 0 : 1) + "M+";
     if (n >= 1000) return (n / 1000).toFixed(n % 1000 === 0 ? 0 : 1) + "K+";
