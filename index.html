@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>JUZT — Google Play</title>
+<style>
+  :root {
+    --page-bg: #f8f9fa;
+    --text: #202124;
+    --muted: #5f6368;
+    --border: #e8eaed;
+    --accent: #e31221;
+    --accent-dark: #b80c19;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--text);
+    font-family: "Google Sans", Roboto, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  }
+  .topbar {
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .topbar svg { width: 24px; height: 24px; }
+  .topbar .brand { font-size: 1.1rem; color: var(--muted); font-weight: 400; }
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 28px 20px 60px;
+  }
+  .header {
+    display: flex;
+    gap: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .icon {
+    width: 112px;
+    height: 112px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #1a1a1c, #000);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+  .icon .white { color: #fff; }
+  .icon .red { color: var(--accent); }
+  .header-info { flex: 1; min-width: 0; }
+  .app-title { font-size: 1.6rem; font-weight: 500; margin: 0 0 4px; }
+  .app-dev { font-size: 0.85rem; color: #01875f; margin-bottom: 4px; }
+  .stats-row {
+    display: flex;
+    gap: 32px;
+    margin: 14px 0 18px;
+    flex-wrap: wrap;
+  }
+  .stat { display: flex; flex-direction: column; align-items: flex-start; }
+  .stat .top { font-size: 0.9rem; color: var(--text); display: flex; align-items: center; gap: 3px; font-weight: 500; }
+  .stat .bottom { font-size: 0.75rem; color: var(--muted); margin-top: 3px; }
+  .star { color: var(--text); }
+  .divider { width: 1px; background: var(--border); align-self: stretch; }
+
+  .install-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 11px 40px;
+    border-radius: 22px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .install-btn:hover:not(:disabled) { background: var(--accent-dark); }
+  .install-btn:disabled { background: #c4c7cc; cursor: wait; }
+  .install-meta { font-size: 0.78rem; color: var(--muted); margin-top: 8px; }
+
+  .section { padding: 28px 0; border-bottom: 1px solid var(--border); }
+  .section-title { font-size: 1.15rem; font-weight: 500; margin: 0 0 16px; }
+
+  .screens {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+  .screens img {
+    height: 320px;
+    width: auto;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+    object-fit: cover;
+    background: #eee;
+  }
+
+  .whatsnew ul { margin: 0; padding-left: 20px; }
+  .whatsnew li { margin-bottom: 10px; line-height: 1.5; font-size: 0.95rem; }
+
+  .about p { line-height: 1.6; font-size: 0.95rem; color: var(--text); margin: 0; }
+
+  .rate-widget { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .rate-stars { display: flex; gap: 4px; }
+  .rate-stars .star-btn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--border);
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.1s ease, transform 0.1s ease;
+  }
+  .rate-stars .star-btn.filled { color: #fbbc04; }
+  .rate-stars .star-btn:hover { transform: scale(1.12); }
+  .rate-msg { font-size: 0.85rem; color: var(--muted); }
+
+  @media (max-width: 600px) {
+    .header { flex-direction: column; align-items: center; text-align: center; }
+    .header-info { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <svg viewBox="0 0 24 24" fill="none"><path d="M4 3.5v17c0 .3.16.58.42.72.26.15.58.14.83-.03l13-8.5a.85.85 0 0 0 0-1.38l-13-8.5a.83.83 0 0 0-.83-.03.83.83 0 0 0-.42.72Z" fill="#e31221"/></svg>
+  <span class="brand">Google Play</span>
+</div>
+
+<div class="container">
+
+  <div class="header">
+    <div class="icon"><span class="white">JU</span><span class="red">ZT</span></div>
+    <div class="header-info">
+      <h1 class="app-title">JUZT</h1>
+      <div class="app-dev">Juzt Tv</div>
+      <div class="stats-row">
+        <div class="stat">
+          <div class="top"><span class="star">★</span> <span id="rating-avg">–</span></div>
+          <div class="bottom" id="rating-count">No reviews yet</div>
+        </div>
+        <div class="divider"></div>
+        <div class="stat">
+          <div class="top" id="downloads-count">–</div>
+          <div class="bottom">Downloads</div>
+        </div>
+        <div class="divider"></div>
+        <div class="stat">
+          <div class="top">PG</div>
+          <div class="bottom">Rated for teens</div>
+        </div>
+        <div class="divider"></div>
+        <div class="stat">
+          <div class="top">19MB</div>
+          <div class="bottom">Size</div>
+        </div>
+      </div>
+      <button class="install-btn" id="downloadBtn" disabled>Loading…</button>
+      <div class="install-meta" id="status">Checking latest version…</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="screens">
+      <img src="1.png" alt="" />
+      <img src="2.png" alt="" />
+      <img src="3.png" alt="" />
+      <img src="4.png" alt="" />
+      <img src="5.png" alt="" />
+      <img src="6.png" alt="" />
+      <img src="7.png" alt="" />
+    </div>
+  </div>
+
+  <div class="section whatsnew">
+    <h2 class="section-title">What's new</h2>
+    <ul>
+      <li>Added Google Sign-In (Optional).</li>
+      <li>Added Android version display in Settings.</li>
+      <li>Added compatibility mode for older devices.</li>
+      <li>Optimized performance.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Rate this app</h2>
+    <div class="rate-widget">
+      <div class="rate-stars" id="rate-stars">
+        <button class="star-btn" data-val="1">★</button>
+        <button class="star-btn" data-val="2">★</button>
+        <button class="star-btn" data-val="3">★</button>
+        <button class="star-btn" data-val="4">★</button>
+        <button class="star-btn" data-val="5">★</button>
+      </div>
+      <div class="rate-msg" id="rate-msg">Tap a star to rate</div>
+    </div>
+  </div>
+
+  <div class="section about">
+    <h2 class="section-title">About this app</h2>
+    <p>JUZT brings anime, movies, series, and TV together in one place — browse by network or studio, track weekly anime releases, and pick up where you left off across mobile and TV.</p>
+  </div>
+
+</div>
+
+<!-- Firebase SDKs (compat build, simplest for a plain HTML page) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-remote-config-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBlW_mWpuW5fuKpOl89jybr0818-C6_feI",
+    authDomain: "juzt-55644.firebaseapp.com",
+    projectId: "juzt-55644",
+    storageBucket: "juzt-55644.firebasestorage.app",
+    messagingSenderId: "531114433876",
+    appId: "1:531114433876:web:20e4867a14553c13693cc1",
+    measurementId: "G-YJ0TCE7ZYQ"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const remoteConfig = firebase.remoteConfig();
+  const db = firebase.firestore();
+
+  // Single doc holding aggregate stats: /stats/juzt { downloads, ratingSum, ratingCount }
+  const statsRef = db.collection("stats").doc("juzt");
+
+  // Cache-bust interval: 0 = always fetch fresh (good for low-traffic admin-controlled pages)
+  remoteConfig.settings.minimumFetchIntervalMillis = 0;
+
+  // Fallback in case fetch fails (first paint / offline)
+  remoteConfig.defaultConfig = {
+    update_url: ""
+  };
+
+  const btn = document.getElementById("downloadBtn");
+  const statusEl = document.getElementById("status");
+  const ratingAvgEl = document.getElementById("rating-avg");
+  const ratingCountEl = document.getElementById("rating-count");
+  const downloadsEl = document.getElementById("downloads-count");
+  const rateMsg = document.getElementById("rate-msg");
+  const starButtons = document.querySelectorAll("#rate-stars .star-btn");
+
+  function formatDownloads(n) {
+    if (n >= 1000000) return (n / 1000000).toFixed(n % 1000000 === 0 ? 0 : 1) + "M+";
+    if (n >= 1000) return (n / 1000).toFixed(n % 1000 === 0 ? 0 : 1) + "K+";
+    return String(n);
+  }
+
+  function renderStats(data) {
+    const downloads = (data && data.downloads) || 0;
+    const ratingSum = (data && data.ratingSum) || 0;
+    const ratingCount = (data && data.ratingCount) || 0;
+
+    downloadsEl.textContent = formatDownloads(downloads);
+
+    if (ratingCount > 0) {
+      const avg = ratingSum / ratingCount;
+      ratingAvgEl.textContent = avg.toFixed(1);
+      ratingCountEl.textContent = `${ratingCount} review${ratingCount === 1 ? "" : "s"}`;
+    } else {
+      ratingAvgEl.textContent = "–";
+      ratingCountEl.textContent = "No reviews yet";
+    }
+  }
+
+  // Live-listen so the numbers update in real time for anyone with the page open
+  statsRef.onSnapshot(
+    (doc) => renderStats(doc.data()),
+    (err) => console.error("Stats listener error:", err)
+  );
+
+  // Star rating submission
+  let hasRated = localStorage.getItem("juzt_rated") === "1";
+  if (hasRated) rateMsg.textContent = "Thanks for rating JUZT!";
+
+  starButtons.forEach((btn) => {
+    btn.addEventListener("mouseenter", () => {
+      if (hasRated) return;
+      const val = Number(btn.dataset.val);
+      starButtons.forEach((b) => b.classList.toggle("filled", Number(b.dataset.val) <= val));
+    });
+    btn.addEventListener("click", () => {
+      if (hasRated) return;
+      const val = Number(btn.dataset.val);
+      hasRated = true;
+      localStorage.setItem("juzt_rated", "1");
+      starButtons.forEach((b) => b.classList.toggle("filled", Number(b.dataset.val) <= val));
+      rateMsg.textContent = "Saving your rating…";
+
+      db.runTransaction((tx) => {
+        return tx.get(statsRef).then((doc) => {
+          const data = doc.data() || {};
+          const newSum = (data.ratingSum || 0) + val;
+          const newCount = (data.ratingCount || 0) + 1;
+          tx.set(statsRef, { ratingSum: newSum, ratingCount: newCount }, { merge: true });
+        });
+      })
+        .then(() => { rateMsg.textContent = "Thanks for rating JUZT!"; })
+        .catch((err) => {
+          console.error("Rating save error:", err);
+          rateMsg.textContent = "Could not save your rating. Try again later.";
+          hasRated = false;
+          localStorage.removeItem("juzt_rated");
+        });
+    });
+  });
+
+  document.getElementById("rate-stars").addEventListener("mouseleave", () => {
+    if (hasRated) return;
+    starButtons.forEach((b) => b.classList.remove("filled"));
+  });
+
+  remoteConfig.fetchAndActivate()
+    .then(() => {
+      const url = remoteConfig.getString("update_url");
+
+      if (!url) {
+        statusEl.textContent = "Download link not configured yet.";
+        btn.textContent = "Unavailable";
+        return;
+      }
+
+      statusEl.textContent = "Free · Contains ads";
+      btn.textContent = "Install";
+      btn.disabled = false;
+      btn.onclick = () => {
+        btn.disabled = true;
+        btn.textContent = "Redirecting…";
+        statsRef.set({ downloads: firebase.firestore.FieldValue.increment(1) }, { merge: true })
+          .catch((err) => console.error("Download count error:", err))
+          .finally(() => { window.location.href = url; });
+      };
+    })
+    .catch((err) => {
+      console.error(err);
+      statusEl.textContent = "Could not reach Firebase. Try again later.";
+      btn.textContent = "Unavailable";
+    });
+</script>
+
+</body>
+</html>
