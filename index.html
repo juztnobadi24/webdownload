@@ -64,11 +64,11 @@
     display: flex;
     gap: 32px;
     margin: 14px 0 18px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
   }
-  .stat { display: flex; flex-direction: column; align-items: flex-start; }
-  .stat .top { font-size: 0.9rem; color: var(--text); display: flex; align-items: center; gap: 3px; font-weight: 500; }
-  .stat .bottom { font-size: 0.75rem; color: var(--muted); margin-top: 3px; }
+  .stat { display: flex; flex-direction: column; align-items: flex-start; flex-shrink: 0; }
+  .stat .top { font-size: 0.9rem; color: var(--text); display: flex; align-items: center; gap: 3px; font-weight: 500; white-space: nowrap; }
+  .stat .bottom { font-size: 0.75rem; color: var(--muted); margin-top: 3px; white-space: nowrap; }
   .star { color: var(--text); }
   .divider { width: 1px; background: var(--border); align-self: stretch; }
 
@@ -104,6 +104,64 @@
     flex-shrink: 0;
     object-fit: cover;
     background: #eee;
+    cursor: zoom-in;
+    transition: transform 0.15s ease;
+  }
+  .screens img:hover { transform: scale(1.03); }
+
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    cursor: zoom-out;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  .lightbox-close {
+    position: fixed;
+    top: 18px;
+    right: 24px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.85;
+  }
+  .lightbox-close:hover { opacity: 1; }
+  .lightbox-nav {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.12);
+    border: none;
+    color: #fff;
+    font-size: 1.6rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lightbox-nav:hover { background: rgba(255,255,255,0.24); }
+  .lightbox-prev { left: 16px; }
+  .lightbox-next { right: 16px; }
+
+  @media (max-width: 600px) {
+    .lightbox-nav { width: 38px; height: 38px; font-size: 1.3rem; }
   }
 
   .whatsnew ul { margin: 0; padding-left: 20px; }
@@ -130,6 +188,21 @@
   @media (max-width: 600px) {
     .header { flex-direction: column; align-items: center; text-align: center; }
     .header-info { text-align: center; }
+    .stats-row {
+      width: 100%;
+      justify-content: center;
+      gap: 10px;
+    }
+    .stat { align-items: center; }
+    .stat .top { font-size: 0.78rem; }
+    .stat .bottom { font-size: 0.62rem; }
+    .install-btn { padding: 11px 32px; }
+  }
+
+  @media (max-width: 380px) {
+    .stats-row { gap: 6px; }
+    .stat .top { font-size: 0.7rem; gap: 2px; }
+    .stat .bottom { font-size: 0.56rem; }
   }
 </style>
 </head>
@@ -174,7 +247,7 @@
   </div>
 
   <div class="section">
-    <div class="screens">
+    <div class="screens" id="screens">
       <img src="1.jpg" alt="" />
       <img src="2.jpg" alt="" />
       <img src="3.jpg" alt="" />
@@ -185,6 +258,13 @@
       <img src="8.png" alt="" />
       <img src="9.png" alt="" />
     </div>
+  </div>
+
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous">&#8249;</button>
+    <img id="lightboxImg" src="" alt="" />
+    <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next">&#8250;</button>
   </div>
 
   <div class="section whatsnew">
@@ -256,6 +336,45 @@
   const downloadsEl = document.getElementById("downloads-count");
   const rateMsg = document.getElementById("rate-msg");
   const starButtons = document.querySelectorAll("#rate-stars .star-btn");
+
+  // --- Screenshot lightbox ---
+  const screenshotImgs = Array.from(document.querySelectorAll("#screens img"));
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightboxImg");
+  const lightboxClose = document.getElementById("lightboxClose");
+  const lightboxPrev = document.getElementById("lightboxPrev");
+  const lightboxNext = document.getElementById("lightboxNext");
+  let currentIndex = 0;
+
+  function openLightbox(index) {
+    currentIndex = index;
+    lightboxImg.src = screenshotImgs[currentIndex].src;
+    lightbox.classList.add("open");
+  }
+  function closeLightbox() {
+    lightbox.classList.remove("open");
+    lightboxImg.src = "";
+  }
+  function showRelative(delta) {
+    currentIndex = (currentIndex + delta + screenshotImgs.length) % screenshotImgs.length;
+    lightboxImg.src = screenshotImgs[currentIndex].src;
+  }
+
+  screenshotImgs.forEach((img, i) => {
+    img.addEventListener("click", () => openLightbox(i));
+  });
+  lightboxClose.addEventListener("click", closeLightbox);
+  lightboxPrev.addEventListener("click", (e) => { e.stopPropagation(); showRelative(-1); });
+  lightboxNext.addEventListener("click", (e) => { e.stopPropagation(); showRelative(1); });
+  lightbox.addEventListener("click", (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (!lightbox.classList.contains("open")) return;
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "ArrowLeft") showRelative(-1);
+    if (e.key === "ArrowRight") showRelative(1);
+  });
 
   function formatDownloads(n) {
     if (n >= 1000000) return (n / 1000000).toFixed(n % 1000000 === 0 ? 0 : 1) + "M+";
